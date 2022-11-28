@@ -1,2 +1,12 @@
-<div [chart]="chart"></div>
-<button type="button" class="btn btn-primary">Get data</button>
+<div class="container mb-5 mt-5">
+  <select class="form-control" id="exampleFormControlSelect1" #caseType (change)="onCaseTypeChange(caseType.value)">
+    <option value="confirmed">Casos Confirmados</option>
+    <option value="recovered">Recuperados</option>
+    <option value="deaths">Mortes</option>
+  </select>
+</div>
+<div *ngIf="!loading; else loadingTemplate" [chart]="chart"></div>
+
+<ng-template #loadingTemplate>
+  <h3 style="height: 400px" class="d-flex justify-content-center align-items-center">Loading...</h3>
+</ng-template>

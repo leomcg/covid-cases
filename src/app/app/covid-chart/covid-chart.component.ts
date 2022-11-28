@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Chart } from 'angular-highcharts';
 import { CovidRestApiService } from '../covid-rest-api.service';
-import { ChartHelperService, Deaths } from './chart-helper.service';
+import { ChartHelperService, Cases } from './chart-helper.service';
 
 
 @Component({
@@ -14,114 +14,76 @@ export class CovidChartComponent implements OnInit {
   constructor(private covidApiService: CovidRestApiService, private chartHelperService: ChartHelperService) { }
   
   ngOnInit(): void {
-    //this.getChartData('brazil', 'confirmed')
-    this.getChartData('brazil', 'deaths')
-    this.getChartData('russia', 'deaths')
-    this.getChartData('india', 'deaths')
-    this.getChartData('china', 'deaths')
-    this.getChartData('south-africa', 'deaths')
+    this.getData('confirmed')
   }
 
-  covidData = []
+  loading = true
   months = []
   chart = new Chart()
-  deaths: Deaths = {
+  cases: Cases = {
     brazil: [],
     russia: [],
     india: [],
-    china: [],
-    south_africa: []
+    china: []
   }
-  // deathsBrazil: any = []
-  // deathsChina: any = []
-  // deathsUsa: any = []
+  title = 'Casos confirmados de'
 
+  countries = [
+     { name: 'brazil', selected: true },
+     { name: 'russia', selected: true },
+     { name: 'india', selected: true },
+     { name: 'china', selected: true },
+  ]
 
+  getData(caseType: string) {
+    this.loading = true
+    this.countries.forEach(el => this.getChartData(el.name, caseType))
+  }
 
   getChartData(country: string, status: string) {
     this.covidApiService.getConfirmedCasesByCountry(country, status).subscribe((data: any) => {
+      this.clearData(country)
       this.filterDataByMonth(data, country)
-      console.log('data: ', data)
     })
+  }
+
+  clearData(country: string) {
+    this.months = []
+    this.cases[country as keyof Cases] = []
   }
 
   filterDataByMonth(data: any[], country: string): void {
     const covidDataByMonth: any = []
     data.filter((el: any) => {
       const dateInfo = el.Date.split('-')
+      // pegando numero de casos por mês (todo dia 28)
       if (dateInfo[2].substring(0, 2) == '28') {
         covidDataByMonth.push(el)
-        console.log(country)
-        if(country == 'south-africa') {
-          this.deaths.south_africa.push(el.Cases)
-        } else {
-          this.deaths[country as keyof Deaths].push(el.Cases)
-        }
+  
+        this.cases[country as keyof Cases].push(el.Cases)
+        // corrigindo retorno da api que retorna um dado a mais para a china
+        this.cases.china = this.cases.china.slice(0, 33)
       }
     })
-    this.months = this.getMonths(covidDataByMonth)
 
-    this.processChart()
+    this.months = this.chartHelperService.formatDates(covidDataByMonth)
+    //console.log('months: ', this.months)
+
+    setTimeout(() => {
+      this.loading = false
+      this.processChart()
+    }, 2500)
     
   }
 
   processChart() {
-    this.chart = new Chart({
-      chart: {
-        type: 'line'
-      },
-      title: {
-        text: 'Mortes e casos confirmados de Covid-19 por país'
-      },
-      credits: {
-        enabled: false
-      },
-      plotOptions: {
-        line: {
-          color: 'red'
-        }
-      },
-      series: [
-        {
-          type: 'line',
-          name: 'Brasil',
-          data: this.deaths.brazil,
-          color: 'gold'
-        },
-        {
-          type: 'line',
-          name: 'Rússia',
-          data: this.deaths.russia,
-          color: 'red'
-        },
-        {
-          type: 'line',
-          name: 'India',
-          data: this.deaths.india,
-          color: 'green'
-        },
-        {
-          type: 'line',
-          name: 'China',
-          data: this.deaths.china,
-          color: 'orangered'
-        },
-        {
-          type: 'line',
-          name: 'África do Sul',
-          data: this.deaths.south_africa,
-          color: 'cyan'
-        },
-      ],
-      xAxis: {
-        type: 'datetime',
-        categories: this.months
-      }
-    });
+    this.chart = this.chartHelperService.processChart(this.title, this.cases, this.months)
   }
 
-  getMonths(array: any) {
-    return array.map((el: any) => el.Date.split('T')[0])
-  } 
+
+
+  onCaseTypeChange(caseType: string) {
+    this.getData(caseType)
+  }
 
 }
