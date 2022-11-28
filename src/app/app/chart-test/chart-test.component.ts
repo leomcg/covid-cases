@@ -27,9 +27,13 @@ export class ChartTestComponent implements OnInit {
       {
         type: 'line',
         name: 'Line 1',
-        data: [1, 2, 3]
+        data: [1, 2, 3],
       }
-    ]
+    ],
+    xAxis: {
+      type:'datetime',
+      categories: ['2020-02-26', '2020-02-27', '2020-02-28']
+    }
   });
 
   // add point to chart serie

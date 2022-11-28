@@ -1,9 +1,16 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CovidRestApiService {
 
-  constructor() { }
+  baseUrl = 'https://api.covid19api.com/'
+
+  constructor(private http: HttpClient) { }
+  
+  getConfirmedCasesByCountry(country: string, status: string) {
+    return this.http.get(this.baseUrl + `total/dayone/country/${country}/status/${status}`)
+  }
 }
