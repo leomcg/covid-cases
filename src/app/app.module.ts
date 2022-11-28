@@ -3,12 +3,19 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 
+import { ChartModule } from 'angular-highcharts';
+import { ChartTestComponent } from './app/chart-test/chart-test.component';
+import { CovidChartComponent } from './app/covid-chart/covid-chart.component';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ChartTestComponent,
+    CovidChartComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    ChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]
