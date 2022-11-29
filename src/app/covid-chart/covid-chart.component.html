@@ -1,4 +1,7 @@
-<div class="container mb-5 mt-5">
+
+<h3 class=" text-center mb-3 mt-3">Gráfico de evolução do Covid-19 nos países BRIC</h3>
+<p class="select-title">Escolha o tipo de caso:</p>
+<div class="select-container">
   <select class="form-control" id="exampleFormControlSelect1" #caseType (change)="onCaseTypeChange(caseType.value)">
     <option value="confirmed">Casos Confirmados</option>
     <option value="recovered">Recuperados</option>

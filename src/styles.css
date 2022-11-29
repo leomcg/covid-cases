@@ -1,1 +1,12 @@
-@import "~bootstrap/dist/css/bootstrap.css" 
+@import "~bootstrap/dist/css/bootstrap.css";
+@import 'ag-grid-community/styles/ag-grid.css';
+@import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+html, body {
+  height: 100%;
+  width: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  font-family: 'Calibri';
+}

@@ -7,11 +7,13 @@ import { ChartModule } from 'angular-highcharts';
 import { AgGridModule } from 'ag-grid-angular';
 
 import { CovidChartComponent } from './covid-chart/covid-chart.component';
+import { CovidGridComponent } from './covid-grid/covid-grid.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    CovidChartComponent
+    CovidChartComponent,
+    CovidGridComponent
   ],
   imports: [
     BrowserModule,

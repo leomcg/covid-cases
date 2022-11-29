@@ -14,7 +14,7 @@ export class ChartHelperService {
         type: 'line'
       },
       title: {
-        text: `Covid-19 no BRIC` 
+        text: ''
       },
       credits: {
         enabled: false
