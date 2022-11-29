@@ -8,13 +8,13 @@ import { Chart } from 'angular-highcharts';
 export class ChartHelperService {
   constructor() { }
 
-  processChart(title: string, cases: any, months: string[]) {
+  processChart(cases: any, months: string[]) {
     return new Chart({
       chart: {
         type: 'line'
       },
       title: {
-        text: `Covid-19 no BRICS` 
+        text: `Covid-19 no BRIC` 
       },
       credits: {
         enabled: false

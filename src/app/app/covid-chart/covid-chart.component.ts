@@ -26,7 +26,6 @@ export class CovidChartComponent implements OnInit {
     india: [],
     china: []
   }
-  title = 'Casos confirmados de'
 
   countries = [
      { name: 'brazil', selected: true },
@@ -36,8 +35,9 @@ export class CovidChartComponent implements OnInit {
   ]
 
   getData(caseType: string) {
+    const countries = ['brazil', 'russia', 'india', 'china']
     this.loading = true
-    this.countries.forEach(el => this.getChartData(el.name, caseType))
+    countries.forEach(el => this.getChartData(el, caseType))
   }
 
   getChartData(country: string, status: string) {
@@ -77,7 +77,7 @@ export class CovidChartComponent implements OnInit {
   }
 
   processChart() {
-    this.chart = this.chartHelperService.processChart(this.title, this.cases, this.months)
+    this.chart = this.chartHelperService.processChart(this.cases, this.months)
   }
 
 
