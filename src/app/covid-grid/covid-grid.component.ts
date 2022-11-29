@@ -1,8 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { AgGridAngular } from 'ag-grid-angular';
-import { CellClickedEvent, ColDef, GridReadyEvent } from 'ag-grid-community';
-import { Observable } from 'rxjs';
-import { covidData } from './mock';
+import { Component, OnInit } from '@angular/core';
+import { ColDef, GridReadyEvent } from 'ag-grid-community';
+import { covidData } from './grid-mock';
 
 @Component({
   selector: 'app-covid-grid',
@@ -10,7 +8,6 @@ import { covidData } from './mock';
   styleUrls: ['./covid-grid.component.css']
 })
 export class CovidGridComponent implements OnInit {
-  @ViewChild(AgGridAngular) agGrid!: AgGridAngular;
   rowData: any;
 
   constructor() {}
@@ -19,14 +16,15 @@ export class CovidGridComponent implements OnInit {
   }
 
 columnDefs: ColDef[] = [
-  { headerName: 'País', field: 'country' },
+  { headerName: 'País', field: 'country', 
+    comparator: (valueA, valueB, nodeA, nodeB, isDescending) => valueA.localeCompare(valueB) 
+  },
   { headerName: 'Testados', field: 'tested', 
-    valueFormatter: params => {
+    valueFormatter: (params) => {
       const data = params.data.tested
       if (!data) return 'Não disponível'
       return data.toLocaleString('pt-br')
-    }, 
-    sortingOrder: ['asc', 'desc']
+    },
   },
   { headerName: 'Infectados', field: 'infected', 
     valueFormatter: params => {
