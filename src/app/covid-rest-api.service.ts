@@ -10,7 +10,7 @@ export class CovidRestApiService {
 
   constructor(private http: HttpClient) { }
   
-  getConfirmedCasesByCountry(country: string, status: string) {
-    return this.http.get(this.baseUrl + `total/dayone/country/${country}/status/${status}`)
+  getConfirmedCasesByCountry(country: string, caseType: string) {
+    return this.http.get(this.baseUrl + `total/dayone/country/${country}/status/${caseType}`)
   }
 }

@@ -65,7 +65,6 @@ export class ChartHelperService {
     return temp.map((el:string) => {
       const [year, month] = el.split('-');
       const result = [month, year].join('/');
-      console.log(result)
       return result
     })
   }

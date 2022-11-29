@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ColDef, GridReadyEvent } from 'ag-grid-community';
+import { CovidGridHelperService } from './grid-helper.service';
 import { covidData } from './grid-mock';
 
 @Component({
@@ -8,56 +9,33 @@ import { covidData } from './grid-mock';
   styleUrls: ['./covid-grid.component.css']
 })
 export class CovidGridComponent implements OnInit {
-  rowData: any;
 
-  constructor() {}
+  constructor(public gridHelper: CovidGridHelperService) {}
 
   ngOnInit(): void {
   }
 
-columnDefs: ColDef[] = [
-  { headerName: 'País', field: 'country', 
-    comparator: (valueA, valueB, nodeA, nodeB, isDescending) => valueA.localeCompare(valueB) 
-  },
-  { headerName: 'Testados', field: 'tested', 
-    valueFormatter: (params) => {
-      const data = params.data.tested
-      if (!data) return 'Não disponível'
-      return data.toLocaleString('pt-br')
+  columnDefs: ColDef[] = [
+    { headerName: 'País', field: 'country', 
+      comparator: this.gridHelper.localeCompare 
     },
-  },
-  { headerName: 'Infectados', field: 'infected', 
-    valueFormatter: params => {
-      const data = params.data.infected
-      if (!data) return 'Não disponível'
-      return data.toLocaleString('pt-br')
-    }, 
-  },
-  { headerName: 'Recuperados', field: 'recovered', 
-    valueFormatter: params => {
-      const data = params.data.recovered
-      if (!data) return 'Não disponível'
-      return data.toLocaleString('pt-br')
-    }, 
-  },
-  { headerName: 'Mortes', field: 'deceased', 
-    valueFormatter: params => {
-      const data = params.data.deceased
-      if (!data) return 'Não disponível'
-      return data.toLocaleString('pt-br')
-    }, 
-  },
-];
-
-defaultColDef: ColDef = {
-  sortable: true,
-  sortingOrder: ['desc', 'asc']
-};
-
-onGridReady(params: GridReadyEvent) {
-  this.rowData = covidData
-}
-
-
+    { headerName: 'Testados', field: 'tested', 
+      valueFormatter: this.gridHelper.formatNumber
+    },
+    { headerName: 'Infectados', field: 'infected', 
+      valueFormatter: this.gridHelper.formatNumber 
+    },
+    { headerName: 'Recuperados', field: 'recovered', 
+      valueFormatter: this.gridHelper.formatNumber
+    },
+    { headerName: 'Mortes', field: 'deceased', 
+      valueFormatter: this.gridHelper.formatNumber
+    },
+  ];
+  
+  rowData: any = [];
+  onGridReady(params: GridReadyEvent) {
+    this.rowData = covidData
+  }
 
 }

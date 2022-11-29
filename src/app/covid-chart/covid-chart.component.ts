@@ -27,21 +27,14 @@ export class CovidChartComponent implements OnInit {
     china: []
   }
 
-  countries = [
-     { name: 'brazil', selected: true },
-     { name: 'russia', selected: true },
-     { name: 'india', selected: true },
-     { name: 'china', selected: true },
-  ]
-
   getData(caseType: string) {
     const countries = ['brazil', 'russia', 'india', 'china']
     this.loading = true
     countries.forEach(el => this.getChartData(el, caseType))
   }
 
-  getChartData(country: string, status: string) {
-    this.covidApiService.getConfirmedCasesByCountry(country, status).subscribe((data: any) => {
+  getChartData(country: string, caseType: string) {
+    this.covidApiService.getConfirmedCasesByCountry(country, caseType).subscribe((data: any) => {
       this.clearData(country)
       this.filterDataByMonth(data, country)
     })
@@ -55,9 +48,9 @@ export class CovidChartComponent implements OnInit {
   filterDataByMonth(data: any[], country: string): void {
     const covidDataByMonth: any = []
     data.filter((el: any) => {
-      const dateInfo = el.Date.split('-')
+      const dateArray = el.Date.split('-')
       // pegando numero de casos por mês (todo dia 28)
-      if (dateInfo[2].substring(0, 2) == '28') {
+      if (dateArray[2].substring(0, 2) == '28') {
         covidDataByMonth.push(el)
   
         this.cases[country as keyof Cases].push(el.Cases)
@@ -79,8 +72,6 @@ export class CovidChartComponent implements OnInit {
   processChart() {
     this.chart = this.chartHelperService.processChart(this.cases, this.months)
   }
-
-
 
   onCaseTypeChange(caseType: string) {
     this.getData(caseType)
