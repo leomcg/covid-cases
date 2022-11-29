@@ -62,7 +62,7 @@ export class CovidChartComponent implements OnInit {
   
         this.cases[country as keyof Cases].push(el.Cases)
         // corrigindo retorno da api que retorna um dado a mais para a china
-        this.cases.china = this.cases.china.slice(0, 33)
+        this.cases.china = this.cases.china.slice(0, 34)
       }
     })
 
